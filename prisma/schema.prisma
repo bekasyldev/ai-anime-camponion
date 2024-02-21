@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  // preview futeres for making searchable
+  // previewFeatures = ["fullTextSearch", "fullTextIndex"]
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Category {
+  id        String      @id @default(uuid())
+  name      String
+  companion Companion[]
+}
+
+model Companion {
+  id           String @id @default(uuid())
+  userId       String
+  src          String
+  // enable much longer characters and make searchable
+  name         String @db.Text
+  description  String
+  instructions String @db.Text
+  seed         String @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId String
+
+  messages Message[]
+
+  @@index([categoryId])
+}
+
+enum Role {
+  user
+  system
+}
+
+model Message {
+  id        String   @id @default(uuid())
+  role      Role
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  componionId String
+  userId      String
+  companion   Companion @relation(fields: [componionId], references: [id], onDelete: Cascade)
+
+  @@index([componionId])
+}

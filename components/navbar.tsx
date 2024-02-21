@@ -26,7 +26,7 @@ const Navbar = () => {
               font.className
             )}
           >
-            anime.<span className="text-purple-700">ai</span>
+            <span className="text-black">anime</span>.ai
           </h1>
         </Link>
       </div>
