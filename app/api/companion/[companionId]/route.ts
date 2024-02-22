@@ -44,3 +44,41 @@ export async function PATCH(
         return new NextResponse("Internal Error", { status: 500})
     }
 }
+
+export async function DELETE(
+    req:Request,
+    { params } : { params: { companionId: string }}
+) {
+    try {
+        const { userId } = auth();
+
+        if(!userId) {
+            return new NextResponse("Unauthrized", { status: 401 });
+        }
+
+        const companion = await db.companion.findUnique({
+            where: {
+                userId,
+                id: params.companionId
+            }
+        })
+
+        if(!companion) {
+            return new NextResponse("Companion not found", { status: 404 });
+        }
+
+        const deletedCompanion = await db.companion.delete({
+            where: {
+                id: companion.id,
+                userId
+            }
+        })
+
+        return NextResponse.json(deletedCompanion)
+    } catch (error) {
+        console.log("[COMPANION_DELETE]", error);
+        return new NextResponse("Internal Error", { status: 500 })
+    }
+    
+
+}

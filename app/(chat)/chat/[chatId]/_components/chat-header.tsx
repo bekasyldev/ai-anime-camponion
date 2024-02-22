@@ -32,10 +32,20 @@ export const ChatHeader = ({ companion }: ChatHeaderProps) => {
   const { user } = useUser();
   const { toast } = useToast();
 
-  const onDelet = async () => {
+  const onDelete = async () => {
     try {
-      // Delete api/companion/id
-    } catch (error) {}
+      await axios.delete(`/api/companion/${companion.id}`);
+      toast({
+        description: "Success.",
+      });
+      router.refresh();
+      router.push("/");
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        description: "Something went wrong.",
+      });
+    }
   };
 
   return (
@@ -62,24 +72,21 @@ export const ChatHeader = ({ companion }: ChatHeaderProps) => {
           <p className="text-xs text-muted-foreground">Create by Bekasyl</p>
         </div>
       </div>
-      {user?.id === companion.id && (
+      {user?.id === companion.userId && (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button size={"icon"} variant={"secondary"}>
+            <Button variant="secondary" size="icon">
               <MoreVertical />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem
-              onClick={() => {
-                router.push(`/companion/${companion.id}`);
-              }}
+              onClick={() => router.push(`/companion/${companion.id}`)}
             >
               <Edit className="w-4 h-4 mr-2" />
               Edit
             </DropdownMenuItem>
-            {/* TO:DO Deleting toast */}
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={onDelete}>
               <Trash className="w-4 h-4 mr-2" />
               Delete
             </DropdownMenuItem>
