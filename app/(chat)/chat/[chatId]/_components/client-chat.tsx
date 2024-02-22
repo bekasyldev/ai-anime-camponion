@@ -1,33 +1,39 @@
 "use client";
 
 import { useCompletion } from "ai/react";
-import { Companion, Message } from "@prisma/client";
-import { ChatHeader } from "./chat-header";
-import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
-import { ChatForm } from "@/components/chat-form";
-import { ChatMessages } from "@/components/chate-messages";
+import { Companion, Message } from "@prisma/client";
+import { useRouter } from "next/navigation";
 
-interface ClientChatProps {
+import { ChatForm } from "@/components/chat-form";
+import { ChatMessageProps } from "@/components/chat-message";
+import { ChatHeader } from "./chat-header";
+import { ChatMessages } from "@/components/chat-messages";
+
+interface ChatClientProps {
   companion: Companion & {
     messages: Message[];
+    // _count: {
+    //   messages: number;
+    // };
   };
 }
 
-export const ClientChat = ({ companion }: ClientChatProps) => {
+export const ChatClient = ({ companion }: ChatClientProps) => {
   const router = useRouter();
-  const [messages, setMessages] = useState<any[]>(companion.messages);
+  const [messages, setMessages] = useState<ChatMessageProps[]>(
+    companion.messages
+  );
 
   const { input, isLoading, handleInputChange, handleSubmit, setInput } =
     useCompletion({
-      // wait until bot generate answer
       api: `/api/chat/${companion.id}`,
-      onFinish(prompt, completion) {
-        // store it in array exicting messages
-        const systemMessage = {
+      onFinish(_prompt, completion) {
+        const systemMessage: ChatMessageProps = {
           role: "system",
           content: completion,
         };
+
         setMessages((current) => [...current, systemMessage]);
         setInput("");
 
@@ -36,12 +42,13 @@ export const ClientChat = ({ companion }: ClientChatProps) => {
     });
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
-    const userMessage = {
+    const userMessage: ChatMessageProps = {
       role: "user",
       content: input,
     };
 
     setMessages((current) => [...current, userMessage]);
+
     handleSubmit(e);
   };
 
