@@ -1,6 +1,7 @@
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 import db from "@/lib/db";
+import { checkSubscription } from "@/lib/subscription";
 
 export async function PATCH(
     req: Request,
@@ -23,7 +24,11 @@ export async function PATCH(
             return new NextResponse("Missing required fields", { status: 400 });
         }
 
-        // Check subscription 
+        const isPro = await checkSubscription();
+        
+        if(!isPro) {
+            return new NextResponse("Pro subscription required", { status: 403 })
+        }
 
         const campanion = await db.companion.update({
             where: {

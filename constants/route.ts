@@ -1,4 +1,4 @@
-import { Home, Plus, Settings } from "lucide-react";
+import { Home, Plus, Settings, Wallet } from "lucide-react";
 
 export const routes = [
     {
@@ -11,6 +11,12 @@ export const routes = [
       icon: Plus,
       href: "/companion/new",
       label: "Create",
+      pro: true,
+    },
+    {
+      icon: Wallet,
+      href: "/plans",
+      label: "Plans",
       pro: true,
     },
     {
