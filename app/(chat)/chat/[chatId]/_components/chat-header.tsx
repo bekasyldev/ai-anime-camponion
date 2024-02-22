@@ -53,7 +53,7 @@ export const ChatHeader = ({ companion }: ChatHeaderProps) => {
       <div className="flex gap-x-2 items-center ">
         <Button
           onClick={() => {
-            router.back;
+            router.push("/");
           }}
           size={"icon"}
           variant={"ghost"}

@@ -115,7 +115,7 @@ export const CompanionForm = ({
   };
 
   return (
-    <div className="h-full p-4 space-y-2 max-w-3xl mx-auto">
+    <div className="h-full p-4 space-y-2 max-w-3xl mx-auto ">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}

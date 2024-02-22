@@ -20,6 +20,9 @@ const CompanionIdPage = async ({
       id: params.companionId,
       userId,
     },
+    include: {
+      messages: true,
+    },
   });
 
   const categories = await db.category.findMany();
