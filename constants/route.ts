@@ -1,5 +1,6 @@
 import { Home, Plus, Settings, Wallet } from "lucide-react";
 
+
 export const routes = [
     {
       icon: Home,
@@ -24,5 +25,21 @@ export const routes = [
       href: "/settings",
       label: "Settings",
       pro: false,
+    },
+  ] as const;
+
+
+export const plans = [
+    {
+      title: "Free",
+      price: 0
+    },
+    {
+      title: "Standard",
+      price: 9.99
+    },
+    {
+      title: "Enterprise",
+      price: 19.99
     },
   ] as const;
