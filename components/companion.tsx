@@ -2,18 +2,14 @@ import { Companion, Message } from "@prisma/client";
 import Image from "next/image";
 import { Card, CardFooter, CardHeader } from "@/components/ui/card";
 import Link from "next/link";
-import { Edit, MessageSquare } from "lucide-react";
-import { Button } from "./ui/button";
+import { MessageSquare } from "lucide-react";
 
 interface CompanionProps {
-  data: Companion[] & {
-    message: Message[];
-  };
-  // data: (Companion & {
-  //   _count: {
-  //     messages: number;
-  //   };
-  // })[];
+  data: (Companion & {
+    _count: {
+      messages: number;
+    };
+  })[];
 }
 
 export const Companions = ({ data }: CompanionProps) => {
@@ -56,7 +52,7 @@ export const Companions = ({ data }: CompanionProps) => {
               @Bekasyl
               <div className="flex items-center">
                 <MessageSquare className="w-3 h-3 mr-1" />
-                10
+                {item._count.messages}
               </div>
             </CardFooter>
           </Link>

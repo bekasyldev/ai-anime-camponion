@@ -2,6 +2,7 @@ import { Categories } from "@/components/categories";
 import { Companions } from "@/components/companion";
 import { SearchInput } from "@/components/search-input";
 import db from "@/lib/db";
+import { Companion, Message } from "@prisma/client";
 
 // server component
 interface RootPageProps {
@@ -15,13 +16,17 @@ const RootPage = async ({ searchParams }: RootPageProps) => {
   const data = await db.companion.findMany({
     where: {
       categoryId: searchParams.categoryId,
-      // fullText search
-      // name: {
-      //   search: searchParams.name,
-      // },
+      name: searchParams.name,
     },
     orderBy: {
       createdAt: "desc",
+    },
+    include: {
+      _count: {
+        select: {
+          messages: true,
+        },
+      },
     },
   });
 
